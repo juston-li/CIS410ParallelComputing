@@ -18,7 +18,7 @@ int main()
    //intended behavior   : a[i] gets the sum of its value and its right neighbor's value.
    //observed behavior   : Not the intended behavior at all. Oops.
    //If only we had some developers to fix this for us.
-   #pragma omp parallel for
+   #pragma omp for ordered
    for(i=1;i<=ARRAYSIZE;i++)
    {
       a[i]=a[i]+a[((i-1)%ARRAYSIZE)];
