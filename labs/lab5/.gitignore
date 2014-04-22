@@ -1,3 +1,4 @@
 pass_init
 pass_mp
 pass_tbb
+pass_cilk
