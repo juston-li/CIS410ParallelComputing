@@ -5,7 +5,7 @@
 
 #include <openssl/md5.h>
 
-#define THREADS 8
+#define THREADS 4
 #define MAX_COMBO 100000000
 
 const char* chars="0123456789";
@@ -37,33 +37,33 @@ void genpass(long passnum, char* passbuff) {
 }
 
 int main(int argc, char** argv) {
-	omp_set_num_threads(THREADS);
-	int threadNum=0;
-	int threadWork = MAX_COMBO/THREADS;
+    omp_set_num_threads(THREADS);
+    int threadNum=0;
+    int threadWork = MAX_COMBO/THREADS;
 
     if(argc != 2) {
         printf("Usage: %s <password hash>\n",argv[0]);
         return 1;
     }
     char passguess[9];
-	char passmatch[9];
+    char passmatch[9];
     long currpass=0;
-	int notfinished=1;
-	int notfound=1;
+    int notfinished=1;
+    int notfound=1;
     #pragma omp parallel private(threadNum) private(notfound) private(currpass) private(passguess)
-	{
-		threadNum=omp_get_thread_num();
-		currpass = threadNum*threadWork;
-		while(notfinished && notfound && currpass < (threadNum+1)*threadWork) {
-        	genpass(currpass,passguess);
-			notfound=test(argv[1], passguess);
-        	currpass++;
-    	}
-		if(notfound == 0) {
-			notfinished = 0;
-			memcpy(passmatch,passguess,9);
-		}
-	}
+    {
+        threadNum=omp_get_thread_num();
+        currpass = threadNum*threadWork;
+        while(notfinished && notfound && currpass < (threadNum+1)*threadWork) {
+            genpass(currpass,passguess);
+            notfound=test(argv[1], passguess);
+            currpass++;
+        }
+        if(notfound == 0) {
+            notfinished = 0;
+            memcpy(passmatch,passguess,9);
+        }
+    }
     printf("found: %s\n",passmatch);
     return 0;
 }
