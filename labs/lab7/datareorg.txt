@@ -1,1 +1,28 @@
-This should be replaced by a description of the data reorganization you chose to implement and its effectiveness. Your description can be short, but should address the change made and why you expected a performance improvement. You should also include performance metrics to support wether runtime improved or not.
+Only change I made was to array B; swapping the column and rows. 
+C stores arrays by Row-major-order so we want the loops to increment 
+across the row before moving to the next column as values across the row
+are likely to be in cache after the first value is read. Array B did not 
+follow this; incrementing columns before rows which would increase the
+likelyhood of cache misses. Swap the rows and columns of array B to follow row-major-order
+
+[juston@Asus-M51AC lab7]$ ./matmul_serial
+Order 1000 multiplication in 0.403974 seconds 
+Order 1000 multiplication at 4950.812977 mflops
+
+ Hey, it worked
+ all done 
+[juston@Asus-M51AC lab7]$ ./matmul_mp		**Only adding #pragma omp parallel for**
+Order 1000 multiplication in 0.214133 seconds 
+Order 1000 multiplication at 9339.988576 mflops
+
+ Hey, it worked
+ all done 
+[juston@Asus-M51AC lab7]$ make all
+icc -o matmul_mp matmul_mp.c -fopenmp
+[juston@Asus-M51AC lab7]$ ./matmul_mp		**Changes to Array B
+Order 1000 multiplication in 0.074788 seconds 
+Order 1000 multiplication at 26742.224659 mflops
+
+ Hey, it worked
+ all done 
+
