@@ -15,14 +15,18 @@ prog:=pipeline_serial
 objs:=$(patsubst %.c,%.o,$(wildcard *.cpp))
 
 cc=icpc
-ccflags= -MMD -g -Wall
+ccflags= -MMD -g -Wall -std=c++11
 ldflags= -lopencv_core -lopencv_highgui -lopencv_imgproc
 
-%.o: %.c
-	$(cc) $(ccflags) -c $<
+#%.o: %.c
+#	$(cc) $(ccflags) -c $<
+all: pipeline_serial pipeline_tbb
 
-$(prog): $(objs)
+pipeline_serial: pipeline_serial.cpp
 	$(cc) $(ccflags) -o $@ $^ $(ldflags)
+
+pipeline_tbb: pipeline_tbb.cpp
+	$(cc) $(ccflags) -o $@ $^ $(ldflags) -ltbb
 
 
 .PHONY: clean
