@@ -11,7 +11,12 @@
 #    0, 100
 #    0, -100
 
-time ./starhole_serial 10000 100 200 100 0 -100 0 0 100 0 -100
+time ./starhole_serial 2000 100 200 100 0 -100 0 0 100 0 -100
+
+
+time ./starhole_cilk 2000 100 200 100 0 -100 0 0 100 0 -100
+
+time ./starhole_openmp 2000 100 200 100 0 -100 0 0 100 0 -100
 
 # Execution time of the serial version is roughly 26 seconds on a nuc
 #Attempting to setup initial state...
