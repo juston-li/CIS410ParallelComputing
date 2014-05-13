@@ -1,0 +1,11 @@
+﻿Homework 4
+Fork-Join Pattern
+1. It is a fundamental way of expressing concurrency for computations. Fork allows operations to increase concurrency by creating a new thread while join allows operations to decreased concurrency by joining a parent and child thread.
+2.  
+   1.  Picture in file directory
+   2.  
+   3. Yes, the fork to the left cell 20 races with the main thread over cell 15. (Main thread would likely reach it first.) Fork to 22 and 27 race as they both try to fork cell 28.
+1. Amount of potential parallelism available above the minimum to use parallel hardware. Fork-Join can be applied recursively to greatly increase parallel slack giving programs high levels of potential parallelism. Work-stealing schedulers then apply this potential parallelism onto actual hardware. 
+Pipeline Pattern
+1. As the number of data items increases, parallelism increases up to a point depending on the pipeline staging. At this optimal point, throughput is maximized as the overlapping stages cover up the serial tasks. After this point, increasing the data items doesn’t increase available parallelism as the serial tasks become a bottleneck for the pipeline. More items would decrease efficiency as the overlapping stages in an optimal pipeline would be replaced by stages waiting and stalling for serial tasks.
+2. With stage-bound workers, workers are assigned to a specific task which makes it simple but theres no data locality among tasks. Item-bound, workers are handle one time at a time which is more complex but improve locality as an item would likely stay in cache throughout the pipeline. It is possible in item bound for workers to get stuck in serial tasks and idle waiting for its turn. Hybrid workers deal with the issue of serial tasks by parking the data item if it has to wait and assigning a new worker when the data item leaves the serial stage.
